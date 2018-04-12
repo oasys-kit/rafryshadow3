@@ -54,6 +54,23 @@ class Shadow3BendingMagnetLightSource(Shadow3LightSource):
     def _build_shadow3_source(self, additional_parameters):
         shadow3_source = Source()
 
+        shadow3_source.FSOURCE_DEPTH=4
+        shadow3_source.F_COLOR=3
+        shadow3_source.F_PHOT=0
+        shadow3_source.F_POLAR=1
+        shadow3_source.NCOL=0
+        shadow3_source.N_COLOR=0
+        shadow3_source.POL_DEG=0.0
+        shadow3_source.SIGDIX=0.0
+        shadow3_source.SIGDIZ=0.0
+        shadow3_source.SIGMAY=0.0
+        shadow3_source.WXSOU=0.0
+        shadow3_source.WYSOU=0.0
+        shadow3_source.WZSOU=0.0
+        shadow3_source.OE_NUMBER =  0
+        shadow3_source.FILE_TRAJ=bytes("NONESPECIFIED", 'utf-8')
+        shadow3_source.FILE_SOURCE=bytes("NONESPECIFIED", 'utf-8')
+
         # FROM SYNED #############################################
         #
         sigma_x, sigma_xp, sigma_z, sigma_zp = self._electron_beam.get_sigmas_all()
@@ -77,6 +94,12 @@ class Shadow3BendingMagnetLightSource(Shadow3LightSource):
         shadow3_source.F_OPD = 1
         shadow3_source.F_SR_TYPE = 0
 
+
+        shadow3_source.F_WIGGLER = 0
+
+
+
+
         shadow3_source.NPOINT       = additional_parameters.NPOINT
         shadow3_source.ISTAR1       = additional_parameters.ISTAR1
         shadow3_source.PH1          = additional_parameters.PH1
@@ -91,7 +114,7 @@ class Shadow3BendingMagnetLightSource(Shadow3LightSource):
         shadow3_source.FDISTR       = additional_parameters.FDISTR
         shadow3_source.F_BOUND_SOUR = additional_parameters.F_BOUND_SOUR
         if additional_parameters.FILE_BOUND is None:
-            shadow3_source.FILE_BOUND   = bytes("NONE SPECIFIED", 'utf-8')
+            shadow3_source.FILE_BOUND   = bytes("NONESPECIFIED", 'utf-8')
         else:
             shadow3_source.FILE_BOUND   = bytes(additional_parameters.FILE_BOUND, 'utf-8')
         shadow3_source.NTOTALPOINT  = additional_parameters.NTOTALPOINT

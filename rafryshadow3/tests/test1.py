@@ -27,5 +27,4 @@ if __name__ == "__main__":
     import Shadow.ShadowTools as ST
 
     ST.plotxy(beam,1,3)
-    print(beam.getshcol(11))
     ST.histo1(beam,11)
