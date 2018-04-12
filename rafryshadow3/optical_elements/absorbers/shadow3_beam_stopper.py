@@ -9,7 +9,7 @@ class Shadow3BeamStopperParameters():
     def __init__(self, FILE_SCR_EXT=init_file_name()):
         self.I_ABS = 0
         self.I_SLIT = 1
-        self.I_STOP = 0
+        self.I_STOP = 1
         self.FILE_SCR_EXT = FILE_SCR_EXT
         self.THICK = 0.0
         self.FILE_ABS = init_file_name()

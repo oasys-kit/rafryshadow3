@@ -36,10 +36,10 @@ if __name__ == "__main__":
 
 
     slit = Shadow3Slit(name="first slit",
-                       boundary_shape=Rectangle(x_left=-0.000001,
-                                                x_right=0.000001,
-                                                y_bottom=-0.000005,
-                                                y_top=0.000005),
+                       boundary_shape=Rectangle(x_left  =-0.001,
+                                                x_right = 0.001,
+                                                y_bottom=-0.005,
+                                                y_top   = 0.005),
                        slit_parameters=Shadow3SlitParameters())
 
     slit_coordinates = ElementCoordinates(p=10.0, q=0.0)
@@ -56,5 +56,5 @@ if __name__ == "__main__":
 
     import Shadow.ShadowTools as ST
 
-    ST.plotxy(beam,1,3)
-    #ST.histo1(beam,11)
+    ST.plotxy(beam,1,3,nolost=True)
+    # ST.histo1(beam,11)

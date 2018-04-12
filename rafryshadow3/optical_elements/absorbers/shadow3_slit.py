@@ -9,7 +9,7 @@ class Shadow3SlitParameters():
     def __init__(self, FILE_SCR_EXT=init_file_name()):
         self.I_ABS  = 0 # HAS ABSORPTION NO (0), YES (1)
         self.I_SLIT = 1 # IS APERTURE/STOP NO (0), YES (1)
-        self.I_STOP = 1 # IS APERTURE (1), STOP (0)
+        self.I_STOP = 0 # IS APERTURE (0), STOP (1)
         self.FILE_SCR_EXT = FILE_SCR_EXT
         self.THICK = 0.0
         self.FILE_ABS = init_file_name()
