@@ -1,5 +1,5 @@
 from rafryshadow3.storage_ring.shadow3_light_source import Shadow3LightSource
-
+from rafryshadow3.util.shadow3_util import check_file_name, init_file_name
 from syned.storage_ring.magnetic_structures.bending_magnet import BendingMagnet
 from syned.storage_ring.electron_beam import ElectronBeam
 
@@ -67,9 +67,9 @@ class Shadow3BendingMagnetLightSource(Shadow3LightSource):
         shadow3_source.WXSOU=0.0
         shadow3_source.WYSOU=0.0
         shadow3_source.WZSOU=0.0
-        shadow3_source.OE_NUMBER =  0
-        shadow3_source.FILE_TRAJ=bytes("NONESPECIFIED", 'utf-8')
-        shadow3_source.FILE_SOURCE=bytes("NONESPECIFIED", 'utf-8')
+        shadow3_source.OE_NUMBER=0
+        shadow3_source.FILE_TRAJ=init_file_name()
+        shadow3_source.FILE_SOURCE=init_file_name()
         shadow3_source.F_OPD = 1
         shadow3_source.F_SR_TYPE = 0
         shadow3_source.F_WIGGLER = 0
@@ -107,10 +107,7 @@ class Shadow3BendingMagnetLightSource(Shadow3LightSource):
         shadow3_source.VDIV2        = additional_parameters.VDIV2
         shadow3_source.FDISTR       = additional_parameters.FDISTR
         shadow3_source.F_BOUND_SOUR = additional_parameters.F_BOUND_SOUR
-        if additional_parameters.FILE_BOUND is None:
-            shadow3_source.FILE_BOUND   = bytes("NONESPECIFIED", 'utf-8')
-        else:
-            shadow3_source.FILE_BOUND   = bytes(additional_parameters.FILE_BOUND, 'utf-8')
+        shadow3_source.FILE_BOUND   = check_file_name(additional_parameters.FILE_BOUND)
         shadow3_source.NTOTALPOINT  = additional_parameters.NTOTALPOINT
 
         return shadow3_source
