@@ -70,6 +70,9 @@ class Shadow3BendingMagnetLightSource(Shadow3LightSource):
         shadow3_source.OE_NUMBER =  0
         shadow3_source.FILE_TRAJ=bytes("NONESPECIFIED", 'utf-8')
         shadow3_source.FILE_SOURCE=bytes("NONESPECIFIED", 'utf-8')
+        shadow3_source.F_OPD = 1
+        shadow3_source.F_SR_TYPE = 0
+        shadow3_source.F_WIGGLER = 0
 
         # FROM SYNED #############################################
         #
@@ -90,15 +93,6 @@ class Shadow3BendingMagnetLightSource(Shadow3LightSource):
         shadow3_source.R_ALADDIN = shadow3_source.R_MAGNET * 100
 
         ########################################################
-
-        shadow3_source.F_OPD = 1
-        shadow3_source.F_SR_TYPE = 0
-
-
-        shadow3_source.F_WIGGLER = 0
-
-
-
 
         shadow3_source.NPOINT       = additional_parameters.NPOINT
         shadow3_source.ISTAR1       = additional_parameters.ISTAR1
