@@ -54,12 +54,12 @@ if __name__ == "__main__":
                                                     y_bottom=-0.5,
                                                     y_top=0.5),
                            mirror_parameters=Shadow3SphericalMirrorParameters(F_EXT=0,
-                                                                              F_DEFAULT=1,
+                                                                              F_DEFAULT=0,
                                                                               SSOUR=14.0,
-                                                                              SIMAG=5.0,
+                                                                              SIMAG=1.0,
                                                                               THETA=88.0))
 
-    mirror_coordinates = ElementCoordinates(p=2.0, q=5.0, angle_radial=88.0, angle_azimuthal=0.0)
+    mirror_coordinates = ElementCoordinates(p=2.0, q=1.0, angle_radial=88.0, angle_azimuthal=0.0)
 
     elements = RaytracingElements()
     elements.add_beamline_element(BeamlineElement(optical_element=slit, coordinates=slit_coordinates))

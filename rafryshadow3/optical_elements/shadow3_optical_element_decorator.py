@@ -20,6 +20,8 @@ class Shadow3OpticalElementDecorator(OpticalElementDecorator):
 
         beam.traceOE(self._shadow3_oe, 1)
 
+        print( self._shadow3_oe.mirinfo() ) #debug
+
         return beam
 
     def _set_coordinates(self, element_coordinates=ElementCoordinates()):

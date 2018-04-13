@@ -3,7 +3,9 @@
 from rafryshadow3.optical_elements.shadow3_optical_element_decorator import Shadow3OpticalElementDecorator
 from rafryshadow3.util.shadow3_util import check_file_name, init_file_name
 
-from syned.beamline.shape import *
+from syned.beamline.shape import SurfaceShape, BoundaryShape, Plane, Cylinder, Sphere, SphericalCylinder, \
+    Ellipsoid, EllipticalCylinder, ParabolicCylinder, Paraboloid, HyperbolicCylinder, Hyperboloid, Toroidal, Conic
+from syned.beamline.shape import Ellipse, Rectangle, Direction
 from syned.beamline.optical_elements.mirrors.mirror import Mirror
 from syned.beamline.element_coordinates import ElementCoordinates
 
@@ -67,7 +69,7 @@ class Shadow3CurvedMirrorParameters(Shadow3MirrorParameters):
         self.SIMAG=SIMAG
         self.THETA=THETA
 
-class Shadow3SphericalMirrorParameters(Shadow3MirrorParameters):
+class Shadow3SphericalMirrorParameters(Shadow3CurvedMirrorParameters):
     def __init__(self,
                  F_REFLEC=0,
                  F_REFL=0,
@@ -95,7 +97,7 @@ class Shadow3SphericalMirrorParameters(Shadow3MirrorParameters):
                                                THETA)
         self.RMIRR=RMIRR
 
-class Shadow3EllipticalMirrorParameters(Shadow3MirrorParameters):
+class Shadow3EllipticalMirrorParameters(Shadow3CurvedMirrorParameters):
     def __init__(self,
                  F_REFLEC=0,
                  F_REFL=0,
@@ -125,7 +127,7 @@ class Shadow3EllipticalMirrorParameters(Shadow3MirrorParameters):
         self.AXMAJ=AXMAJ
         self.AXMIN=AXMIN
 
-class Shadow3ParabolicMirrorParameters(Shadow3MirrorParameters):
+class Shadow3ParabolicMirrorParameters(Shadow3CurvedMirrorParameters):
     def __init__(self,
                  F_REFLEC=0,
                  F_REFL=0,
@@ -155,7 +157,7 @@ class Shadow3ParabolicMirrorParameters(Shadow3MirrorParameters):
         self.F_SIDE=F_SIDE
         self.PARAM =PARAM
 
-class Shadow3ToroidalMirrorParameters(Shadow3MirrorParameters):
+class Shadow3ToroidalMirrorParameters(Shadow3CurvedMirrorParameters):
     def __init__(self,
                  F_REFLEC=0,
                  F_REFL=0,
@@ -202,7 +204,7 @@ class Shadow3Mirror(Mirror, Shadow3OpticalElementDecorator):
         shadow3_oe.DUMMY=100
         
         shadow3_oe.F_CRYSTAL=0
-        shadow3_oe.F_REFRAC=2
+        shadow3_oe.F_REFRAC=0
         shadow3_oe.F_SCREEN=0
         shadow3_oe.N_SCREEN=0
 
@@ -294,6 +296,23 @@ class Shadow3Mirror(Mirror, Shadow3OpticalElementDecorator):
             shadow3_oe.FMIRR = 5
             shadow3_oe.FCYL  = 0
         else:
+
+
+            if isinstance(self._surface_shape, Ellipsoid) or isinstance(self._surface_shape, EllipticalCylinder):
+                shadow3_oe.FMIRR = 2
+            elif isinstance(self._surface_shape, Sphere) or isinstance(self._surface_shape, SphericalCylinder):
+                shadow3_oe.FMIRR = 1
+            elif isinstance(self._surface_shape, Paraboloid) or isinstance(self._surface_shape,ParabolicCylinder ):
+                shadow3_oe.FMIRR = 4
+            elif isinstance(self._surface_shape, Hyperboloid) or isinstance(self._surface_shape, HyperbolicCylinder):
+                shadow3_oe.FMIRR = 7
+            elif isinstance(self._surface_shape, Toroidal):
+                shadow3_oe.FMIRR = 3
+            elif isinstance(self._surface_shape, Conic):
+                shadow3_oe.FMIRR = 10
+
+
+
             shadow3_oe.F_CONVEX = self._surface_shape._convexity
 
             if isinstance(self._surface_shape, Cylinder):
@@ -303,8 +322,7 @@ class Shadow3Mirror(Mirror, Shadow3OpticalElementDecorator):
                 shadow3_oe.FCYL  = 0
 
             shadow3_oe.F_EXT=additional_parameters.F_EXT
-
-            if not isinstance(self._surface_shape, Conic) and shadow3_oe.F_EXT == 0: # AUTOMATIC CALUCLATION
+            if (not isinstance(self._surface_shape, Conic)) and shadow3_oe.F_EXT == 0: # AUTOMATIC CALCULATION
                 shadow3_oe.F_DEFAULT=additional_parameters.F_DEFAULT
 
                 if shadow3_oe.F_DEFAULT == 0:
@@ -314,23 +332,16 @@ class Shadow3Mirror(Mirror, Shadow3OpticalElementDecorator):
 
                 if isinstance(self._surface_shape, Paraboloid): shadow3_oe.F_SIDE=additional_parameters.F_SIDE
             else:
-                if isinstance(self._surface_shape, Ellipsoid) or isinstance(self._surface_shape, Hyperboloid):
-                    shadow3_oe.FMIRR = 2 if isinstance(self._surface_shape, Ellipsoid) else 7
-
+                if isinstance(self._surface_shape, Ellipsoid) or isinstance(self._surface_shape, Hyperboloid) \
+                         or isinstance(self._surface_shape, EllipticalCylinder)  or isinstance(self._surface_shape, HyperbolicCylinder):
                     shadow3_oe.AXMAJ  = round(self._surface_shape._maj_axis/2, 4)
                     shadow3_oe.AXMIN  = round(self._surface_shape._min_axis/2, 4)
                     shadow3_oe.ELL_THE= 0.0 # defined later!
-                elif isinstance(self._surface_shape, Sphere):
-                    shadow3_oe.FMIRR = 1
-
+                elif isinstance(self._surface_shape, Sphere) or isinstance(self._surface_shape, SphericalCylinder):
                     shadow3_oe.RMIRR = round(self._surface_shape.get_radius(), 4)
-                elif isinstance(self._surface_shape, Paraboloid):
-                    shadow3_oe.FMIRR = 4
-
+                elif isinstance(self._surface_shape, Paraboloid) or isinstance(self._surface_shape, ParabolicCylinder):
                     shadow3_oe.PARAM = round(self._surface_shape._parabola_parameter, 4)
                 elif isinstance(self._surface_shape, Toroidal):
-                    shadow3_oe.FMIRR = 3
-
                     shadow3_oe.R_MAJ = round(self._surface_shape._maj_radius, 4)
                     shadow3_oe.R_MIN = round(self._surface_shape._min_radius, 4)
                 elif isinstance(self._surface_shape, Conic):
@@ -398,9 +409,9 @@ class Shadow3Mirror(Mirror, Shadow3OpticalElementDecorator):
             x_min, x_max, z_min, z_max = self._boundary_shape.get_boundaries()
 
             shadow3_oe.RLEN1  = z_max
-            shadow3_oe.RLEN2  = z_min
+            shadow3_oe.RLEN2  = -z_min
             shadow3_oe.RWIDX1 = x_max
-            shadow3_oe.RWIDX2 = x_min
+            shadow3_oe.RWIDX2 = -x_min
 
 
     def _set_coordinates(self, element_coordinates=ElementCoordinates()):
