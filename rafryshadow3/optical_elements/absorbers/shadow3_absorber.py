@@ -59,8 +59,6 @@ class Shadow3Absorber(Shadow3OpticalElementDecorator):
                 cx_slit[0] = 0.5*(x_max + x_min)
                 cz_slit[0] = 0.5*(z_max + z_min)
 
-                print(rx_slit[0], rz_slit[0], cx_slit[0], cz_slit[0])
-
         if additional_parameters.I_ABS == 1:
             thick[0] = additional_parameters.THICK
             file_abs[0] = check_file_name(additional_parameters.FILE_ABS)

@@ -3,15 +3,15 @@ from syned.storage_ring.electron_beam import ElectronBeam
 from syned.storage_ring.magnetic_structures.bending_magnet import BendingMagnet
 from syned.beamline.beamline_element import BeamlineElement
 from syned.beamline.element_coordinates import ElementCoordinates
-from syned.beamline.shape import Ellipse, Rectangle
+from syned.beamline.shape import SphericalCylinder, Rectangle, Convexity, Direction
 
 from rafry.raytracer.raytracer import RaytracingElements, RaytracingManager, RaytracingParameters
 
 from rafryshadow3.raytracer.shadow3_raytracer import Shadow3Raytracer
 from rafryshadow3.storage_ring.light_sources.shadow3_bending_magnet_light_source import Shadow3BendingMagnetLightSource, Shadow3BendingMagnetParameters
 from rafryshadow3.optical_elements.absorbers.shadow3_slit import Shadow3Slit, Shadow3SlitParameters
-from rafryshadow3.optical_elements.mirrors.shadow3_plane_mirror import Shadow3PlaneMirror, Shadow3PlaneMirrorParameters
-from rafryshadow3.optical_elements.mirrors.shadow3_spherical_mirror import Shadow3SpericalMirror, Shadow3SphericalMirrorParameters
+from rafryshadow3.optical_elements.mirrors.shadow3_mirror import Shadow3Mirror, Shadow3SphericalMirrorParameters
+
 
 if __name__ == "__main__":
 
@@ -45,14 +45,19 @@ if __name__ == "__main__":
 
     slit_coordinates = ElementCoordinates(p=10.0, q=2.0)
 
-    mirror = Shadow3SpericalMirror(name="mirror 1",
-                                   boundary_shape=Rectangle(x_left=-0.05, x_right=0.05, y_bottom=-0.5, y_top=0.5),
-                                   mirror_parameters=Shadow3SphericalMirrorParameters(FCYL=1,
-                                                                                      F_EXT=0,
-                                                                                      F_DEFAULT=1,
-                                                                                      SSOUR=14.0,
-                                                                                      SIMAG=5.0,
-                                                                                      THETA=88.0))
+    mirror = Shadow3Mirror(name="mirror 1",
+                           surface_shape=SphericalCylinder(radius=0.0,
+                                                           convexity=Convexity.UPWARD,
+                                                           cylinder_direction=Direction.TANGENTIAL),
+                           boundary_shape=Rectangle(x_left=-0.05,
+                                                    x_right=0.05,
+                                                    y_bottom=-0.5,
+                                                    y_top=0.5),
+                           mirror_parameters=Shadow3SphericalMirrorParameters(F_EXT=0,
+                                                                              F_DEFAULT=1,
+                                                                              SSOUR=14.0,
+                                                                              SIMAG=5.0,
+                                                                              THETA=88.0))
 
     mirror_coordinates = ElementCoordinates(p=2.0, q=5.0, angle_radial=88.0, angle_azimuthal=0.0)
 
